@@ -34,9 +34,9 @@ module write_logic #(
 wire [ptr_size-1:0] next_b_write_ptr;
 wire [ptr_size-1:0] next_g_write_ptr;
 
-assign g_write_ptr = (b_write_ptr >> 1) ^ b_write_ptr;  // Grey code for write pointer
+assign g_write_ptr = (b_write_ptr >> 1) ^ b_write_ptr;  // gray code for write pointer
 assign next_b_write_ptr = b_write_ptr + 1;  // Calculate next write pointer value(binary)
-assign next_g_write_ptr = (next_b_write_ptr >> 1) ^ next_b_write_ptr;   // Grey code for next write pointer
+assign next_g_write_ptr = (next_b_write_ptr >> 1) ^ next_b_write_ptr;   // gray code for next write pointer
 
 always @ (posedge clk or negedge reset_n) begin
     if(~reset_n) begin
@@ -44,7 +44,7 @@ always @ (posedge clk or negedge reset_n) begin
         write_data_out <= {word_size{1'b0}};
         full <= 0;
     end else begin
-        // Invert two MSB's of read pointer(grey code) and compare with next write pointer(grey code) value
+        // Invert two MSB's of read pointer(gray code) and compare with next write pointer(gray code) value
         if (next_g_write_ptr == {~read_ptr[ptr_size-1:ptr_size-2], read_ptr[ptr_size-3:0]}) begin
             full <= 1;
         end else begin
