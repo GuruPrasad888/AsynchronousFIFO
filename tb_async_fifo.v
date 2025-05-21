@@ -1,32 +1,6 @@
 `timescale 1ns / 1ps
 
-module tb_asynchronous_fifo;
-reg [7:0] write_data_in;
-reg write_clk;
-reg read_clk;
-reg reset_n;
-wire [7:0] read_data_out;
-wire full;
-wire empty;
-
-always #5 write_clk = ~write_clk;
-always #4 read_clk = ~read_clk;
-
-asynchronous_fifo DUT(
-    .write_data_in(write_data_in),
-    .write_clk(write_clk),
-    .read_clk(read_clk),
-    .reset_n(reset_n),
-    .read_data_out(read_data_out),
-    .wire(wire),
-    .empty(empty)
-);
-
-initial begin
-
-`timescale 1ns / 1ps
-
-module tb_asynchronous_fifo;
+module tb_async_fifo;
 
 reg [7:0] write_data_in;
 reg write_clk;
@@ -37,7 +11,7 @@ wire full;
 wire empty;
 
 always #5 write_clk = ~write_clk;  // Write clock (10 ns period)
-always #4 read_clk = ~read_clk;    // Read clock (8 ns period)
+always #6 read_clk = ~read_clk;    // Read clock (12 ns period)
 
 // Instantiate the FIFO
 asynchronous_fifo DUT(
@@ -80,7 +54,7 @@ initial begin
 
         begin : READ_PROC
             // Start reading a bit later to allow FIFO to fill up
-            #100;
+            #60;
             while (read_cnt < 20) begin
                 @(posedge read_clk);
                 if (!empty) begin
@@ -90,7 +64,7 @@ initial begin
         end
     join
 
-    #50;
+    #20;
     $finish;
 end
 

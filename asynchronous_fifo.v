@@ -10,6 +10,7 @@ module sync_ff #(parameter N = 16)(
 reg [N-1:0] q1;
 always @(posedge clk or negedge reset_n) begin
     if (!reset_n) begin
+        q1 <= {N{1'b0}};
         Q <= {N{1'b0}};
     end else begin
         q1 <= D;
